@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>💚 Ashley's Secret Spot 💚</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e7f6ec 0%, #c6e8c3 100%);
+      color: #1e3d21;
+      margin: 0;
+      padding: 50px 20px;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+      user-select: none;
+      /* subtle texture to avoid flatness */
+      background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Lock screen styling */
+    .lock-screen {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #d5edd9;
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 18px rgba(0,128,0,0.4);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      border: 2px solid #3a7d44;
+      transition: box-shadow 0.4s ease-in-out;
+    }
+    .lock-screen:hover {
+      box-shadow: 0 0 25px #4caf50, 0 0 40px #388e3c;
+    }
+
+    .lock-screen input {
+      padding: 12px;
+      font-size: 1.1em;
+      width: 100%;
+      border: 2px solid #3a7d44;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      outline-color: #3a7d44;
+      transition: box-shadow 0.3s ease;
+      background: #f0f9f1;
+      color: #2a3a22;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .lock-screen input:focus {
+      box-shadow: 0 0 12px #3a7d44;
+      background: white;
+    }
+
+    .lock-screen button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      background-color: #3a7d44;
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      box-shadow: 0 3px 6px rgba(58,125,68,0.5);
+      user-select: none;
+      letter-spacing: 1px;
+    }
+
+    .lock-screen button:hover {
+      background-color: #2c5d32;
+      transform: scale(1.05);
+      box-shadow: 0 5px 12px rgba(44,93,50,0.7);
+    }
+
+    #error {
+      margin-top: 1em;
+      min-height: 2em;
+      color: #8b0000;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-style: italic;
+      user-select: text;
+    }
+
+    /* Content container */
+    #content {
+      max-width: 720px;
+      margin: 30px auto 0;
+      text-align: left;
+      position: relative;
+      z-index: 10;
+      background: #f0f9f1;
+      border-radius: 15px;
+      padding: 30px 40px;
+      box-shadow: 0 0 28px rgba(42,93,52,0.45);
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+      user-select: text;
+    }
+
+    h1, h2 {
+      font-weight: 800;
+      color: #2a5d34;
+      text-shadow: 0 0 8px #75b573;
+      margin-bottom: 0.3em;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    p, li {
+      font-size: 1.15em;
+      color: #2a3a22;
+      margin-bottom: 1em;
+      user-select: text;
+    }
+
+    ul {
+      padding-left: 1.5em;
+      margin-bottom: 1.8em;
+    }
+
+    /* Buttons for toggling sections */
+    .toggle-btn {
+      background-color: #3a7d44;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 10px 12px 22px 0;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 8px rgba(58,125,68,0.6);
+      text-transform: uppercase;
+      font-size: 1em;
+    }
+    .toggle-btn:hover {
+      background-color: #2c5d32;
+      box-shadow: 0 5px 15px rgba(44,93,50,0.9);
+    }
+    .toggle-btn:focus {
+      outline: 3px solid #75b573;
+      outline-offset: 3px;
+    }
+
+    /* Sections hidden by default */
+    .section {
+      display: none;
+      margin-bottom: 30px;
+      background: #d5edd9;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: inset 0 0 12px rgba(58,125,68,0.35);
+      font-style: normal;
+      user-select: text;
+    }
+
+    /* Animal container */
+    .animal-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 28px;
+      margin-top: 28px;
+    }
+
+    .animal {
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
+      object-fit: cover;
+      filter: drop-shadow(0 0 8px #3a7d44);
+      animation: float 4.5s ease-in-out infinite;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      cursor: default;
+      user-select: none;
+      border: 2px solid transparent;
+    }
+    .animal:hover {
+      transform: scale(1.2) rotate(7deg);
+      filter: drop-shadow(0 0 22px #2c5d32);
+      border-color: #2c5d32;
+      z-index: 20;
+    }
+    @keyframes float {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-14px);}
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #7fff7f 45%, transparent 80%);
+      border-radius: 50%;
+      opacity: 0.85;
+      animation: sparkle-move 2.2s linear infinite;
+      filter: drop-shadow(0 0 7px #2f8c2f);
+    }
+
+    @keyframes sparkle-move {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-60px) scale(0.4); opacity: 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="lock-screen" id="lockScreen" role="dialog" aria-labelledby="lockTitle" aria-describedby="lockDesc" tabindex="0">
+    <h1 id="lockTitle">🛑 Secret Spot 🛑</h1>
+    <p id="lockDesc">Only Ashley can enter. What’s the passcode?</p>
+    <input
+      type="password"
+      id="password"
+      placeholder="MMDD — Hint: your birthday"
+      autocomplete="off"
+      aria-label="Enter passcode"
+      autofocus
+    />
+    <br />
+    <button onclick="checkPassword()" aria-describedby="error">Enter</button>
+    <p id="error" role="alert" aria-live="assertive"></p>
+  </div>
+
+  <main id="content" class="hidden" tabindex="-1" role="main" aria-label="Ashley Hernandez Secret Content">
+
+    <h1>Welcome, Pretty Eyes 💚</h1>
+    <p>This page is just for you — cats, dogs, sparkles, and all the love.</p>
+
+    <button class="toggle-btn" aria-expanded="false" aria-controls="likesSection" onclick="toggleSection('likesSection', this)">
+      What she loves 💚
+    </button>
+    <button class="toggle-btn" aria-expanded="false" aria-controls="bestiesSection" onclick="toggleSection('bestiesSection', this)">
+      Her Besties 💕
+    </button>
+    <button class="toggle-btn" aria-expanded="false" aria-controls="aboutSection" onclick="toggleSection('aboutSection', this)">
+      About Ashley
+    </button>
+
+    <section id="likesSection" class="section" aria-hidden="true">
+      <h2>🍴 Things She Loves</h2>
+      <ul>
+        <li>🥒 Pickles (yeah, she's serious about it)</li>
+        <li>🧋 Boba (automatic yes)</li>
+        <li>🫓 Pupusas (her roots)</li>
+        <li>🍔 In-N-Out (I think so)</li>
+        <li>🍗 Wingstop (confirmed favorite)</li>
+        <li>🎮 Roblox (sometimes)</li>
+        <li>😴 Naps like it’s a sport (daily naps)</li>
+        <li>🎥 LOVES horror movies (automatic yes bruh)</li>
+        <li>😭 Funny videos (well, yeah..)</li>
+        <li>📱 iPhone stickers... (yeah, a little too much sometimes)</li>
+        <li>💚 Green (but like, aesthetic green, not that harsh highlighter color)</li>
+      </ul>
+    </section>
+
+    <section id="bestiesSection" class="section" aria-hidden="true">
+      <h2>🧍‍♀️ Her Little Circle</h2>
+      <ul>
+        <li>Thelma - (bsf) 💕</li>
+        <li>Cris - (bbsf) 💕</li>
+      </ul>
+    </section>
+
+    <section id="aboutSection" class="section" aria-hidden="true">
+      <h2>About Ashley</h2>
+      <p><strong>Nickname(s):</strong> Pretty Eyes, Silly, Ash, Pretty, chicken nugget</p>
+      <p>She’s probably one of the funniest people I know — she says wild stuff with the straightest face.</p>
+      <p>But also has this quiet kindness that sneaks up on you.</p>
+      <p>Doesn’t mess with people much unless she really knows them.</p>
+      <p><strong>AYEEE:</strong> She loves Julio!!! (me too)</p>
+      <p>She’s done band for over 2 years now, kinda sick!! Music’s like her second language?!</p>
+      <p>She loves horror and pickles a little too much..</p>
+      <p><strong>What I notice sometimes:</strong></p>
+      <p>
+        Her small, small but so pretty eyes — they glow when she’s happy or talking about something she loves.<br />
+        The way she dresses? Clean, confident, but respectful — not loud, but it says everything about her beauty.<br />
+        She carries herself differently than others. It’s like a quiet kind of pretty, it sneaks up on you in a way, and then never leaves your head, unfortunately.
+      </p>
+      <p>
+        When she gets sleepy, she tends to become a bit dry and takes some time to reply.<br />
+        She’s not the biggest on touch but she’ll reach out, tap my arm, sit a little closer, and for a second it feels like the world paused but in a good way you know?<br />
+        She tries, even though it’s not her thing, and that means more than anything.
+      </p>
+      <p><strong>Quote About Her:</strong></p>
+      <blockquote style="font-style: italic; color: #3a7d44; margin-left: 20px;">
+        "I didn’t fall in love all at once. It happened slowly—every time she said my name, every time she smiled when she didn’t know I was looking, every time she tried, even when it wasn’t easy for her."<br />
+        <small>- @butterfliesrising</small>
+      </blockquote>
+      <p><strong>Bible Verse:</strong></p>
+      <blockquote style="font-weight: 700; color: #2c5d32; margin-left: 20px;">
+        "She is clothed with strength and dignity, and she laughs without fear of the future."<br />
+        <small>- Proverbs 31:25</small>
+      </blockquote>
+      <p><strong>What she’ll do to me if I don’t stay with her:</strong> 😔🔪💔</p>
+    </section>
+
+    <div class="animal-container" aria-label="Cute cats and dogs">
+      <!-- Cats gifs -->
+      <img class="animal" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Cute cat typing" />
+      <img class="animal" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" alt="Cat blinking" />
+      <img class="animal" src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" alt="Cat cleaning itself" />
+
+      <!-- Dogs gifs -->
+      <img class="animal" src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Dog wagging tail" />
+      <img class="animal" src="https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif" alt="Happy dog jumping" />
+      <img class="animal" src="https://media.giphy.com/media/26tknCqiJrBQG6bxC/giphy.gif" alt="Puppy tilting head" />
+    </div>
+
+  </main>
+
+  <script>
+    const correctPass = "0712";
+    const errorMsg = document.getElementById("error");
+    const lockScreen = document.getElementById("lockScreen");
+    const content = document.getElementById("content");
+
+    function checkPassword() {
+      const pass = document.getElementById("password").value.trim();
+      if (pass === correctPass) {
+        lockScreen.style.display = "none";
+        content.classList.remove("hidden");
+        content.focus();
+        errorMsg.innerText = "";
+      } else {
+        if (pass.length !== 4) {
+          errorMsg.innerText = "Hint: It's 4 digits, mmdd format.";
+        } else if (!/^\d+$/.test(pass)) {
+          errorMsg.innerText = "Only numbers, silly! Try again.";
+        } else if (!pass.startsWith("07")) {
+          errorMsg.innerText = "Think summer vibes... What month?";
+        } else if (!pass.endsWith("12")) {
+          errorMsg.innerText = "Almost there... What day is it?";
+        } else {
+          errorMsg.innerText = "Nah, not quite. Try again!";
+        }
+      }
+    }
+
+    // Toggle sections visibility with buttons
+    function toggleSection(id, btn) {
+      const section = document.getElementById(id);
+      const isHidden = section.style.display === "none" || section.style.display === "";
+      section.style.display = isHidden ? "block" : "none";
+      btn.setAttribute("aria-expanded", isHidden);
+      section.setAttribute("aria-hidden", !isHidden);
+    }
+
+    // Sparkle generator
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = (window.innerHeight + 10) + 'px';
+      sparkle.style.animationDuration = (1 + Math.random() * 2) + 's';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 2000);
+    }
+
+    setInterval(createSparkle, 300);
+
+  </script>
+
+</body>
+</html>
